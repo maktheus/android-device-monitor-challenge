@@ -10,7 +10,7 @@ O site é estático. Abra `index.html` no navegador ou sirva a pasta com qualque
 npx serve .
 ```
 
-O documento completo está disponível em `docs/android-device-monitor-desafio.pdf` e também na versão HTML em `docs/android-device-monitor-desafio.html`.
+O documento completo está disponível em `docs/android-device-monitor-desafio.pdf` e também na versão HTML em `docs/android-device-monitor-desafio.html`. O roteiro técnico com referências oficiais e passo a passo está em `docs/guia-implementacao.md`.
 
 ## Publicar no GitHub Pages
 

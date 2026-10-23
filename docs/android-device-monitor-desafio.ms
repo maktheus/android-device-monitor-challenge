@@ -118,11 +118,43 @@ Funcionalidades implementadas: 30 pontos. Fundamentos Android e Kotlin: 20 ponto
 .PP
 Faixas: 90–100 Excelente; 75–89 Bom; 60–74 Satisfatório; 0–59 Necessita desenvolvimento.
 .NH 1
-9. Desafios opcionais
+9. Como fazer: roteiro de implementação
+.PP
+Use a sequência abaixo para reduzir o risco técnico e chegar a uma entrega demonstrável em cinco dias.
+.IP 1.
+Defina os estados: captura parada, captura ativa, sensor ausente, histórico vazio e falha de persistência.
+.IP 2.
+Crie a base: Kotlin, Gradle, versão mínima documentada e três telas navegáveis.
+.IP 3.
+Implemente o dispositivo: modele dados de Build e da bateria antes de conectá-los à UI.
+.IP 4.
+Implemente o sensor: registre o acelerômetro, copie os três eixos e o timestamp para um modelo imutável e remova o listener ao pausar.
+.IP 5.
+Persista: crie entidade, DAO e banco Room; exponha operações por um Repository.
+.IP 6.
+Conecte o estado: use um ViewModel para expor um estado de tela e receber eventos da UI.
+.IP 7.
+Teste e observe: escreva dois testes unitários, faça o experimento repouso/movimento e registre as limitações.
+.PP
+Documentação oficial recomendada:
+.br
+Arquitetura Android: https://developer.android.com/topic/architecture
+.br
+Sensores: https://developer.android.com/develop/sensors-and-location/sensors/sensors_overview
+.br
+BatteryManager: https://developer.android.com/reference/android/os/BatteryManager
+.br
+Room: https://developer.android.com/training/data-storage/room
+.br
+Testes locais: https://developer.android.com/training/testing/local-tests
+.br
+Kotlin: https://kotlinlang.org/docs/
+.NH 1
+10. Desafios opcionais
 .PP
 Inteligência Artificial: exportar leituras em CSV e realizar análise exploratória simples. Segurança Android: analisar permissões e identificar riscos. Eficiência energética: comparar frequências de leitura e impactos no uso de recursos.
 .NH 1
-10. Critério de conclusão e checklist
+11. Critério de conclusão e checklist
 .PP
 O projeto está concluído quando as funcionalidades obrigatórias são demonstráveis, os artefatos são entregues e o candidato explica as decisões técnicas.
 .IP \(bu 2
