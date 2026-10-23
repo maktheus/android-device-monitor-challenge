@@ -89,6 +89,12 @@ class MonitorViewModel(
         }
     }
 
+    fun clearHistory() {
+        viewModelScope.launch {
+            runCatching { readingRepository.clearAll() }
+        }
+    }
+
     fun refreshDeviceInfo() {
         _deviceInfo.value = deviceRepository.read()
     }

@@ -6,6 +6,7 @@ interface ReadingRepository {
     fun observeAll(): Flow<List<AccelerometerReading>>
     suspend fun insert(reading: AccelerometerReading)
     suspend fun delete(reading: AccelerometerReading)
+    suspend fun clearAll()
 }
 
 class RoomReadingRepository(private val readingDao: ReadingDao) : ReadingRepository {
@@ -17,5 +18,9 @@ class RoomReadingRepository(private val readingDao: ReadingDao) : ReadingReposit
 
     override suspend fun delete(reading: AccelerometerReading) {
         readingDao.delete(reading)
+    }
+
+    override suspend fun clearAll() {
+        readingDao.clearAll()
     }
 }

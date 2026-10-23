@@ -6,4 +6,7 @@
     <color name="paper">#EEF2EE</color>
     <color name="muted">#89929C</color>
     <color name="line">#263447</color>
+    <color name="emerald_400">#34D399</color>
+    <color name="navy_800">#101F33</color>
+    <color name="grid_line">#1A2B40</color>
 </resources>

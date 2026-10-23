@@ -18,4 +18,10 @@ object ReadingFormatter {
     fun battery(value: Int?): String = value?.let { "$it%" } ?: "Indisponível"
 
     fun batteryStatus(status: BatteryStatus): String = status.label
+
+    fun magnitude(x: Float, y: Float, z: Float): Float =
+        kotlin.math.sqrt(x * x + y * y + z * z)
+
+    fun magnitudeString(x: Float, y: Float, z: Float): String =
+        String.format(Locale.US, "%.2f m/s²", magnitude(x, y, z))
 }

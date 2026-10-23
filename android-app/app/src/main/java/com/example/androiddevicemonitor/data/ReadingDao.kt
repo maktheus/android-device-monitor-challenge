@@ -16,4 +16,7 @@ interface ReadingDao {
 
     @Delete
     suspend fun delete(reading: AccelerometerReading)
+
+    @Query("DELETE FROM accelerometer_readings")
+    suspend fun clearAll()
 }

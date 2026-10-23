@@ -29,4 +29,11 @@
     <string name="history_empty">Nenhuma leitura salva ainda.</string>
     <string name="delete">Excluir</string>
     <string name="saved">Leitura salva</string>
+    <string name="chart_title">Curvas de Aceleração Dinâmica vs Estática</string>
+    <string name="export_csv">Exportar CSV</string>
+    <string name="clear_history">Limpar Histórico</string>
+    <string name="mean_x">X Médio</string>
+    <string name="mean_y">Y Médio</string>
+    <string name="mean_z">Z Médio</string>
+    <string name="mean_mag">‖a‖ Médio</string>
 </resources>

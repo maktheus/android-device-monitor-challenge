@@ -33,6 +33,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tabDevice: Button
     private lateinit var tabHistory: Button
 
+    private lateinit var historyChart: AccelerometerChartView
+    private lateinit var historyCountBadge: TextView
+    private lateinit var statMeanX: TextView
+    private lateinit var statMeanY: TextView
+    private lateinit var statMeanZ: TextView
+    private lateinit var statMeanMag: TextView
+    private lateinit var btnExportCsv: Button
+    private lateinit var btnClearHistory: Button
+    private var currentHistoryReadings: List<AccelerometerReading> = emptyList()
+
     private lateinit var backCallback: OnBackPressedCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +73,15 @@ class MainActivity : AppCompatActivity() {
         tabMonitor = findViewById(R.id.tab_monitor)
         tabDevice = findViewById(R.id.tab_device)
         tabHistory = findViewById(R.id.tab_history)
+
+        historyChart = findViewById(R.id.history_chart)
+        historyCountBadge = findViewById(R.id.history_count_badge)
+        statMeanX = findViewById(R.id.stat_mean_x)
+        statMeanY = findViewById(R.id.stat_mean_y)
+        statMeanZ = findViewById(R.id.stat_mean_z)
+        statMeanMag = findViewById(R.id.stat_mean_mag)
+        btnExportCsv = findViewById(R.id.btn_export_csv)
+        btnClearHistory = findViewById(R.id.btn_clear_history)
     }
 
     private fun setupBackNavigation() {
@@ -99,6 +118,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener { viewModel.saveCurrentReading() }
+
+        btnExportCsv.setOnClickListener {
+            exportHistoryCsv(currentHistoryReadings)
+        }
+        btnClearHistory.setOnClickListener {
+            viewModel.clearHistory()
+        }
     }
 
     private fun collectState() {
@@ -156,34 +182,154 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderHistory(readings: List<AccelerometerReading>) {
+        currentHistoryReadings = readings
+        historyCountBadge.text = "${readings.size} Amostras"
+        historyChart.setReadings(readings)
+
         historyList.removeAllViews()
+
         if (readings.isEmpty()) {
+            statMeanX.text = "+0.00"
+            statMeanY.text = "+0.00"
+            statMeanZ.text = "+0.00"
+            statMeanMag.text = "0.00"
+            btnExportCsv.isEnabled = false
+            btnClearHistory.isEnabled = false
+
             historyList.addView(TextView(this).apply {
                 text = getString(R.string.history_empty)
                 setTextColor(getColor(R.color.muted))
-                textSize = 16f
+                textSize = 15f
+                setPadding(0, 16, 0, 16)
             })
             return
         }
+
+        btnExportCsv.isEnabled = true
+        btnClearHistory.isEnabled = true
+
+        val meanX = readings.map { it.axisX }.average().toFloat()
+        val meanY = readings.map { it.axisY }.average().toFloat()
+        val meanZ = readings.map { it.axisZ }.average().toFloat()
+        val meanMag = readings.map { ReadingFormatter.magnitude(it.axisX, it.axisY, it.axisZ) }.average().toFloat()
+
+        statMeanX.text = ReadingFormatter.axis(meanX)
+        statMeanY.text = ReadingFormatter.axis(meanY)
+        statMeanZ.text = ReadingFormatter.axis(meanZ)
+        statMeanMag.text = String.format(java.util.Locale.US, "%.2f", meanMag)
+
+        // Cards for each reading
         readings.forEach { reading ->
-            val row = LinearLayout(this).apply {
+            val mag = ReadingFormatter.magnitude(reading.axisX, reading.axisY, reading.axisZ)
+            val card = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setBackgroundColor(getColor(R.color.navy_900))
+                setPadding(28, 22, 28, 22)
+                val lp = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(0, 0, 0, 20)
+                }
+                layoutParams = lp
+            }
+
+            // Header: Timestamp + Magnitude Badge
+            val headerRow = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
-                setPadding(0, 14, 0, 14)
             }
-            val details = TextView(this).apply {
+            val timestampView = TextView(this).apply {
                 layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-                text = "${ReadingFormatter.axis(reading.axisX)}  ${ReadingFormatter.axis(reading.axisY)}  ${ReadingFormatter.axis(reading.axisZ)}\n${ReadingFormatter.timestamp(reading.timestamp)}"
-                setTextColor(getColor(R.color.paper))
-                textSize = 14f
+                text = ReadingFormatter.timestamp(reading.timestamp)
+                setTextColor(getColor(R.color.muted))
+                textSize = 12f
             }
-            val delete = Button(this).apply {
+            val magView = TextView(this).apply {
+                text = String.format(java.util.Locale.US, "||a|| = %.2f m/s²", mag)
+                setTextColor(getColor(R.color.cyan_400))
+                textSize = 13f
+                typeface = android.graphics.Typeface.DEFAULT_BOLD
+            }
+            headerRow.addView(timestampView)
+            headerRow.addView(magView)
+            card.addView(headerRow)
+
+            // Visual Bars for X, Y, Z
+            val axesRow = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                setPadding(0, 18, 0, 14)
+            }
+            axesRow.addView(createAxisVisual("X", reading.axisX, getColor(R.color.cyan_400)))
+            axesRow.addView(createAxisVisual("Y", reading.axisY, getColor(R.color.orange_500)))
+            axesRow.addView(createAxisVisual("Z", reading.axisZ, getColor(R.color.paper)))
+            card.addView(axesRow)
+
+            // Bottom action: Delete button
+            val footerRow = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = android.view.Gravity.END
+            }
+            val deleteBtn = Button(this).apply {
                 text = getString(R.string.delete)
                 isAllCaps = false
+                textSize = 12f
                 setOnClickListener { viewModel.deleteReading(reading.id) }
             }
-            row.addView(details)
-            row.addView(delete)
-            historyList.addView(row)
+            footerRow.addView(deleteBtn)
+            card.addView(footerRow)
+
+            historyList.addView(card)
+        }
+    }
+
+    private fun exportHistoryCsv(readings: List<AccelerometerReading>) {
+        if (readings.isEmpty()) return
+        val csv = buildString {
+            append("ID,Timestamp,Data_Hora,Eixo_X,Eixo_Y,Eixo_Z,Magnitude\n")
+            readings.forEach { r ->
+                val mag = ReadingFormatter.magnitude(r.axisX, r.axisY, r.axisZ)
+                val dt = ReadingFormatter.timestamp(r.timestamp)
+                append("${r.id},${r.timestamp},\"$dt\",${r.axisX},${r.axisY},${r.axisZ},${String.format(java.util.Locale.US, "%.2f", mag)}\n")
+            }
+        }
+        val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(android.content.Intent.EXTRA_SUBJECT, "Leituras Acelerômetro - Android Device Monitor")
+            putExtra(android.content.Intent.EXTRA_TEXT, csv)
+        }
+        startActivity(android.content.Intent.createChooser(intent, "Exportar Leituras (CSV)"))
+    }
+
+    private fun createAxisVisual(label: String, value: Float, color: Int): LinearLayout {
+        return LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                setMargins(6, 0, 6, 0)
+            }
+            val text = TextView(this@MainActivity).apply {
+                text = "$label ${ReadingFormatter.axis(value)}"
+                setTextColor(color)
+                textSize = 13f
+            }
+            val barBg = LinearLayout(this@MainActivity).apply {
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 8).apply {
+                    topMargin = 8
+                }
+                setBackgroundColor(getColor(R.color.line))
+            }
+            val ratio = (kotlin.math.abs(value) / 15f).coerceIn(0.05f, 1f)
+            val barFill = View(this@MainActivity).apply {
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, ratio)
+                setBackgroundColor(color)
+            }
+            val barSpacer = View(this@MainActivity).apply {
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f - ratio)
+            }
+            barBg.addView(barFill)
+            barBg.addView(barSpacer)
+
+            addView(text)
+            addView(barBg)
         }
     }
 
