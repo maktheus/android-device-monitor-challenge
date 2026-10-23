@@ -18,24 +18,27 @@ class SensorRepository(context: Context) : SensorEventListener {
     var isMonitoring: Boolean = false
         private set
 
-    fun start() {
-        if (accelerometer == null || isMonitoring) return
+    fun start(): Boolean {
+        if (accelerometer == null || isMonitoring) return false
         isMonitoring = sensorManager.registerListener(
             this,
             accelerometer,
             SensorManager.SENSOR_DELAY_NORMAL
         )
+        return isMonitoring
     }
 
     fun stop() {
-        sensorManager.unregisterListener(this)
-        isMonitoring = false
+        if (isMonitoring) {
+            sensorManager.unregisterListener(this)
+            isMonitoring = false
+        }
     }
 
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor.type != Sensor.TYPE_ACCELEROMETER) return
         _reading.value = LiveReading(
-            timestamp = event.timestamp,
+            timestamp = System.currentTimeMillis(),
             axisX = event.values[0],
             axisY = event.values[1],
             axisZ = event.values[2]

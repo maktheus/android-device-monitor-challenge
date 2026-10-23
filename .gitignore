@@ -2,3 +2,13 @@
 Thumbs.db
 node_modules/
 *.log
+
+# Gradle & Android
+.gradle/
+build/
+**/build/
+local.properties
+.idea/
+*.iml
+*.apk
+

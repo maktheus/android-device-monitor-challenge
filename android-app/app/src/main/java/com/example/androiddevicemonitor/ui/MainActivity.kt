@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -13,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.androiddevicemonitor.R
 import com.example.androiddevicemonitor.data.AccelerometerReading
+import com.example.androiddevicemonitor.data.DeviceInfo
+import com.example.androiddevicemonitor.data.LiveReading
 import com.example.androiddevicemonitor.data.ReadingFormatter
 import kotlinx.coroutines.launch
 
@@ -24,15 +27,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var monitorStatus: TextView
     private lateinit var monitorMessage: TextView
     private lateinit var toggleButton: Button
+    private lateinit var saveButton: Button
     private lateinit var historyList: LinearLayout
+    private lateinit var tabMonitor: Button
+    private lateinit var tabDevice: Button
+    private lateinit var tabHistory: Button
+
+    private lateinit var backCallback: OnBackPressedCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         bindViews()
+        setupBackNavigation()
         bindActions()
         collectState()
         showPanel(monitorPanel)
+        checkSensorAvailability()
     }
 
     override fun onPause() {
@@ -47,20 +58,47 @@ class MainActivity : AppCompatActivity() {
         monitorStatus = findViewById(R.id.monitor_status)
         monitorMessage = findViewById(R.id.monitor_message)
         toggleButton = findViewById(R.id.toggle_monitoring)
+        saveButton = findViewById(R.id.save_reading)
         historyList = findViewById(R.id.history_list)
+        tabMonitor = findViewById(R.id.tab_monitor)
+        tabDevice = findViewById(R.id.tab_device)
+        tabHistory = findViewById(R.id.tab_history)
+    }
+
+    private fun setupBackNavigation() {
+        backCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                showPanel(monitorPanel)
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, backCallback)
+    }
+
+    private fun checkSensorAvailability() {
+        if (!viewModel.isSensorAvailable) {
+            monitorStatus.text = getString(R.string.sensor_unavailable)
+            toggleButton.isEnabled = false
+            saveButton.isEnabled = false
+        }
     }
 
     private fun bindActions() {
-        findViewById<Button>(R.id.tab_monitor).setOnClickListener { showPanel(monitorPanel) }
-        findViewById<Button>(R.id.tab_device).setOnClickListener {
+        tabMonitor.setOnClickListener { showPanel(monitorPanel) }
+        tabDevice.setOnClickListener {
             viewModel.refreshDeviceInfo()
             showPanel(devicePanel)
         }
-        findViewById<Button>(R.id.tab_history).setOnClickListener { showPanel(historyPanel) }
+        tabHistory.setOnClickListener { showPanel(historyPanel) }
+
         toggleButton.setOnClickListener {
-            if (viewModel.isMonitoring.value) viewModel.stopMonitoring() else viewModel.startMonitoring()
+            if (viewModel.isMonitoring.value) {
+                viewModel.stopMonitoring()
+            } else {
+                viewModel.startMonitoring()
+            }
         }
-        findViewById<Button>(R.id.save_reading).setOnClickListener { viewModel.saveCurrentReading() }
+
+        saveButton.setOnClickListener { viewModel.saveCurrentReading() }
     }
 
     private fun collectState() {
@@ -73,28 +111,37 @@ class MainActivity : AppCompatActivity() {
                 launch {
                     viewModel.message.collect { message ->
                         monitorMessage.text = message.orEmpty()
-                        if (message != null) Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
-                        viewModel.clearMessage()
+                        if (message != null) {
+                            Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+                            viewModel.clearMessage()
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun renderReading(reading: com.example.androiddevicemonitor.data.LiveReading?) {
+    private fun renderReading(reading: LiveReading?) {
         val current = reading ?: return
         findViewById<TextView>(R.id.value_x).text = "X  ${ReadingFormatter.axis(current.axisX)}"
         findViewById<TextView>(R.id.value_y).text = "Y  ${ReadingFormatter.axis(current.axisY)}"
         findViewById<TextView>(R.id.value_z).text = "Z  ${ReadingFormatter.axis(current.axisZ)}"
-        findViewById<TextView>(R.id.reading_timestamp).text = "Timestamp: ${ReadingFormatter.timestamp(current.timestamp)}"
+        findViewById<TextView>(R.id.reading_timestamp).text =
+            "Timestamp: ${ReadingFormatter.timestamp(current.timestamp)}"
     }
 
     private fun renderMonitoringState(active: Boolean) {
+        if (!viewModel.isSensorAvailable) {
+            monitorStatus.text = getString(R.string.sensor_unavailable)
+            toggleButton.isEnabled = false
+            saveButton.isEnabled = false
+            return
+        }
         monitorStatus.text = getString(if (active) R.string.capture_running else R.string.capture_stopped)
         toggleButton.text = getString(if (active) R.string.stop_capture else R.string.start_capture)
     }
 
-    private fun renderDevice(info: com.example.androiddevicemonitor.data.DeviceInfo) {
+    private fun renderDevice(info: DeviceInfo) {
         findViewById<TextView>(R.id.device_values).text = buildString {
             append("${getString(R.string.manufacturer)}: ${info.manufacturer}\n")
             append("${getString(R.string.model)}: ${info.model}\n")
@@ -103,7 +150,7 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<TextView>(R.id.battery_values).text = buildString {
             append("Percentual: ${ReadingFormatter.battery(info.batteryPercent)}\n")
-            append("Estado: ${if (info.isCharging) getString(R.string.charging) else getString(R.string.not_charging)}\n")
+            append("Estado: ${ReadingFormatter.batteryStatus(info.batteryStatus)}\n")
             append("${getString(R.string.power_source)}: ${info.powerSource ?: getString(R.string.battery_unknown)}")
         }
     }
@@ -144,5 +191,11 @@ class MainActivity : AppCompatActivity() {
         monitorPanel.visibility = if (selected == monitorPanel) View.VISIBLE else View.GONE
         devicePanel.visibility = if (selected == devicePanel) View.VISIBLE else View.GONE
         historyPanel.visibility = if (selected == historyPanel) View.VISIBLE else View.GONE
+
+        backCallback.isEnabled = (selected != monitorPanel)
+
+        tabMonitor.alpha = if (selected == monitorPanel) 1.0f else 0.65f
+        tabDevice.alpha = if (selected == devicePanel) 1.0f else 0.65f
+        tabHistory.alpha = if (selected == historyPanel) 1.0f else 0.65f
     }
 }

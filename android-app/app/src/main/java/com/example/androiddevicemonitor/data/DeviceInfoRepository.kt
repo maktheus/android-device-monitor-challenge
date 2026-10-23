@@ -12,9 +12,12 @@ data class DeviceInfo(
     val androidVersion: String,
     val apiLevel: Int,
     val batteryPercent: Int?,
-    val isCharging: Boolean,
+    val batteryStatus: BatteryStatus,
     val powerSource: String?
-)
+) {
+    val isCharging: Boolean
+        get() = batteryStatus == BatteryStatus.CHARGING || batteryStatus == BatteryStatus.FULL
+}
 
 class DeviceInfoRepository(private val context: Context) {
     fun read(): DeviceInfo {
@@ -22,9 +25,10 @@ class DeviceInfoRepository(private val context: Context) {
         val level = battery?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
         val scale = battery?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
         val percent = if (level >= 0 && scale > 0) (level * 100 / scale) else null
-        val status = battery?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
-        val charging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
-            status == BatteryManager.BATTERY_STATUS_FULL
+
+        val statusExtra = battery?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+        val status = parseBatteryStatus(statusExtra)
+
         val plugged = battery?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0
         val source = when (plugged) {
             BatteryManager.BATTERY_PLUGGED_AC -> "AC"
@@ -32,14 +36,25 @@ class DeviceInfoRepository(private val context: Context) {
             BatteryManager.BATTERY_PLUGGED_WIRELESS -> "Sem fio"
             else -> null
         }
+
         return DeviceInfo(
             manufacturer = Build.MANUFACTURER,
             model = Build.MODEL,
             androidVersion = Build.VERSION.RELEASE,
             apiLevel = Build.VERSION.SDK_INT,
             batteryPercent = percent,
-            isCharging = charging,
+            batteryStatus = status,
             powerSource = source
         )
+    }
+
+    companion object {
+        fun parseBatteryStatus(statusCode: Int): BatteryStatus = when (statusCode) {
+            BatteryManager.BATTERY_STATUS_CHARGING -> BatteryStatus.CHARGING
+            BatteryManager.BATTERY_STATUS_DISCHARGING -> BatteryStatus.DISCHARGING
+            BatteryManager.BATTERY_STATUS_FULL -> BatteryStatus.FULL
+            BatteryManager.BATTERY_STATUS_NOT_CHARGING -> BatteryStatus.NOT_CHARGING
+            else -> BatteryStatus.UNAVAILABLE
+        }
     }
 }
