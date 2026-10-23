@@ -19,12 +19,17 @@ import kotlinx.coroutines.launch
 
 class MonitorViewModel(
     application: Application,
-    private val sensorRepository: SensorRepository = SensorRepository(application),
-    private val deviceRepository: DeviceInfoRepository = DeviceInfoRepository(application),
-    private val readingRepository: ReadingRepository = RoomReadingRepository(
-        AppDatabase.get(application).readingDao()
-    )
+    private val sensorRepository: SensorRepository,
+    private val deviceRepository: DeviceInfoRepository,
+    private val readingRepository: ReadingRepository
 ) : AndroidViewModel(application) {
+
+    constructor(application: Application) : this(
+        application = application,
+        sensorRepository = SensorRepository(application),
+        deviceRepository = DeviceInfoRepository(application),
+        readingRepository = RoomReadingRepository(AppDatabase.get(application).readingDao())
+    )
 
     val liveReading: StateFlow<LiveReading?> = sensorRepository.reading
     val isSensorAvailable: Boolean get() = sensorRepository.isAvailable

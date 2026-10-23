@@ -11,4 +11,5 @@ local.properties
 .idea/
 *.iml
 *.apk
+!docs/app-debug.apk
 

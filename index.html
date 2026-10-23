@@ -22,10 +22,14 @@
       <nav class="top-nav" aria-label="Navegação principal">
         <a href="#brief">Contexto</a>
         <a href="#requirements">Requisitos</a>
+        <a href="#screenshots">Telas Reais</a>
         <a href="#ui-example">Exemplo de UI</a>
         <a href="#resources">Referências</a>
       </nav>
-      <a class="nav-cta" href="docs/android-device-monitor-desafio.pdf" download>Baixar PDF <span>↗</span></a>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <a class="nav-cta" href="docs/android-device-monitor-desafio.pdf" download>Baixar PDF <span>↗</span></a>
+        <a class="nav-cta" href="docs/app-debug.apk" download style="border-color:var(--orange);color:var(--orange);font-weight:bold;">Baixar APK <span>↓</span></a>
+      </div>
     </header>
 
     <main id="top">
@@ -35,8 +39,9 @@
           <h1>Android<br /><em>Device Monitor</em></h1>
           <p class="hero-lead">Um desafio para desenvolver, em Kotlin, um aplicativo capaz de consultar o dispositivo, acompanhar sensores e registrar evidências de uso em uma interface funcional.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#brief">Conhecer o escopo <span>↓</span></a>
-            <a class="text-link" href="docs/android-device-monitor-desafio.pdf" download>baixar documento completo <span>↗</span></a>
+            <a class="button button-primary" href="docs/app-debug.apk" download>Baixar APK Debug <span>↓</span></a>
+            <a class="text-link" href="#screenshots">Ver Telas Reais <span>↓</span></a>
+            <a class="text-link" href="docs/android-device-monitor-desafio.pdf" download>Baixar PDF <span>↗</span></a>
           </div>
           <div class="hero-stats">
             <div><strong>Android</strong><span>plataforma nativa</span></div>
@@ -107,6 +112,34 @@
             <button class="ui-save" type="button"><span>＋</span> Salvar leitura atual</button>
             <div class="ui-bottom-nav"><span class="selected">◉<small>Monitor</small></span><span>▣<small>Dispositivo</small></span><span>▤<small>Histórico</small></span></div>
           </div>
+        </div>
+      </section>
+
+      <section class="screenshots-section section-shell" id="screenshots">
+        <div class="section-index">03.1 / TELAS DO APLICATIVO REAL</div>
+        <div class="section-heading">
+          <div><h2>Execução real no<br /><em>dispositivo e emulador.</em></h2></div>
+          <p>Capturas reais do aplicativo Android nativo em execução, demonstrando os três painéis exigidos, persistência local e integridade de dados.</p>
+        </div>
+        <div class="screenshots-grid">
+          <article class="screenshot-card reveal">
+            <span class="screenshot-tag">Painel 1 · RF003</span>
+            <img src="assets/screenshot-monitor.png" alt="Tela de Monitoramento do Acelerômetro" loading="lazy" />
+            <h3>Monitoramento em tempo real</h3>
+            <p>Captura contínua dos eixos X, Y e Z com timestamp cronológico real, status de execução e liberação automática de ciclo de vida.</p>
+          </article>
+          <article class="screenshot-card reveal reveal-delay">
+            <span class="screenshot-tag">Painel 2 · RF001 &amp; RF002</span>
+            <img src="assets/screenshot-dispositivo.png" alt="Tela de Informações do Dispositivo e Bateria" loading="lazy" />
+            <h3>Hardware e Bateria</h3>
+            <p>Exibição real de fabricante, modelo, versão do Android, API Level, percentual de carga, fonte de alimentação e enum de domínio da bateria.</p>
+          </article>
+          <article class="screenshot-card reveal reveal-delay-2">
+            <span class="screenshot-tag">Painel 3 · RF004</span>
+            <img src="assets/screenshot-historico.png" alt="Tela de Histórico com Room" loading="lazy" />
+            <h3>Histórico de leituras</h3>
+            <p>Persistência local segura com Room Database, listagem ordenada por timestamp, exclusão pontual e sobrevivência ao reinício do aplicativo.</p>
+          </article>
         </div>
       </section>
 
