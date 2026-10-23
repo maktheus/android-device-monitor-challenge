@@ -12,6 +12,10 @@ npx serve .
 
 O documento completo está disponível em `docs/android-device-monitor-desafio.pdf` e também na versão HTML em `docs/android-device-monitor-desafio.html`. O roteiro técnico com referências oficiais e passo a passo está em `docs/guia-implementacao.md`.
 
+## Aplicativo Android
+
+O projeto nativo completo está em `android-app/`. Ele implementa monitoramento real do acelerômetro, informações do dispositivo, bateria, Room, histórico e testes unitários. Consulte `android-app/README.md` para requisitos de ambiente e comandos de build.
+
 ## Publicar no GitHub Pages
 
 1. Crie um repositório no GitHub e envie o conteúdo desta pasta para a branch `main`.

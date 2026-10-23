@@ -1,0 +1,9 @@
+<resources>
+    <color name="navy_950">#07111E</color>
+    <color name="navy_900">#0B1727</color>
+    <color name="orange_500">#FF7138</color>
+    <color name="cyan_400">#78E0DB</color>
+    <color name="paper">#EEF2EE</color>
+    <color name="muted">#89929C</color>
+    <color name="line">#263447</color>
+</resources>

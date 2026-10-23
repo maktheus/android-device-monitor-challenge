@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/navy_950"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ANDROID DEVICE MONITOR"
+            android:textColor="@color/orange_500"
+            android:textSize="11sp"
+            android:letterSpacing="0.12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Monitoramento do dispositivo"
+            android:textColor="@color/paper"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/tab_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal">
+            <Button android:id="@+id/tab_monitor" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/tab_monitor" android:textAllCaps="false" />
+            <Button android:id="@+id/tab_device" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/tab_device" android:textAllCaps="false" />
+            <Button android:id="@+id/tab_history" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/tab_history" android:textAllCaps="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/monitor_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="28dp" android:text="@string/accelerometer" android:textColor="@color/cyan_400" android:textSize="12sp" />
+            <TextView android:id="@+id/monitor_status" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:text="@string/capture_stopped" android:textColor="@color/paper" android:textSize="20sp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="horizontal">
+                <TextView android:id="@+id/value_x" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="X  +0.00" android:textColor="@color/paper" android:textSize="18sp" />
+                <TextView android:id="@+id/value_y" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Y  +0.00" android:textColor="@color/paper" android:textSize="18sp" />
+                <TextView android:id="@+id/value_z" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Z  +0.00" android:textColor="@color/paper" android:textSize="18sp" />
+            </LinearLayout>
+            <TextView android:id="@+id/reading_timestamp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="Timestamp: —" android:textColor="@color/muted" android:textSize="12sp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:orientation="horizontal">
+                <Button android:id="@+id/toggle_monitoring" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/start_capture" android:textAllCaps="false" />
+                <Button android:id="@+id/save_reading" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:layout_weight="1" android:text="@string/save_reading" android:textAllCaps="false" />
+            </LinearLayout>
+            <TextView android:id="@+id/monitor_message" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:textColor="@color/orange_500" android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/device_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="28dp" android:text="@string/device_title" android:textColor="@color/cyan_400" android:textSize="12sp" />
+            <TextView android:id="@+id/device_values" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:lineSpacingExtra="8dp" android:textColor="@color/paper" android:textSize="17sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="28dp" android:text="@string/battery_title" android:textColor="@color/cyan_400" android:textSize="12sp" />
+            <TextView android:id="@+id/battery_values" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:lineSpacingExtra="8dp" android:textColor="@color/paper" android:textSize="17sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/history_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="28dp" android:text="@string/history_title" android:textColor="@color/cyan_400" android:textSize="12sp" />
+            <LinearLayout android:id="@+id/history_list" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="vertical" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

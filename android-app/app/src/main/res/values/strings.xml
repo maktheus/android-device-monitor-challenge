@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Android Device Monitor</string>
+    <string name="tab_monitor">Monitor</string>
+    <string name="tab_device">Dispositivo</string>
+    <string name="tab_history">Histórico</string>
+    <string name="monitor_title">Monitoramento</string>
+    <string name="accelerometer">Acelerômetro</string>
+    <string name="capture_stopped">Captura interrompida</string>
+    <string name="capture_running">Captura em andamento</string>
+    <string name="sensor_unavailable">Acelerômetro indisponível neste dispositivo</string>
+    <string name="start_capture">Iniciar captura</string>
+    <string name="stop_capture">Parar captura</string>
+    <string name="save_reading">Salvar leitura atual</string>
+    <string name="axis_x">Eixo X</string>
+    <string name="axis_y">Eixo Y</string>
+    <string name="axis_z">Eixo Z</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="device_title">Informações do dispositivo</string>
+    <string name="manufacturer">Fabricante</string>
+    <string name="model">Modelo</string>
+    <string name="android_version">Android</string>
+    <string name="api_level">API Level</string>
+    <string name="battery_title">Bateria</string>
+    <string name="battery_unknown">Indisponível</string>
+    <string name="charging">Carregando</string>
+    <string name="not_charging">Não carregando</string>
+    <string name="power_source">Fonte</string>
+    <string name="history_title">Histórico de leituras</string>
+    <string name="history_empty">Nenhuma leitura salva ainda.</string>
+    <string name="delete">Excluir</string>
+    <string name="saved">Leitura salva</string>
+</resources>
