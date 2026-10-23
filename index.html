@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#08111f" />
+    <meta name="description" content="Desafio técnico prático para construir um monitor Android nativo." />
+    <title>Android Device Monitor — Desafio técnico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="cursor-glow" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Android Device Monitor">
+        <span class="brand-mark"><i></i><i></i><i></i></span>
+        <span>ADM<span class="brand-dot">.</span></span>
+      </a>
+      <nav class="top-nav" aria-label="Navegação principal">
+        <a href="#brief">Briefing</a>
+        <a href="#requirements">Requisitos</a>
+        <a href="#score">Avaliação</a>
+      </nav>
+      <a class="nav-cta" href="docs/android-device-monitor-desafio.pdf" download>Baixar PDF <span>↗</span></a>
+    </header>
+
+    <main id="top">
+      <section class="hero section-shell">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span class="status-dot"></span> avaliação técnica prática · 05 dias</p>
+          <h1>Leia o que<br /><em>se move.</em></h1>
+          <p class="hero-lead">Construa uma janela para o hardware Android: dados reais, sensores vivos e decisões de engenharia que resistem ao uso.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#brief">Explorar o desafio <span>↓</span></a>
+            <a class="text-link" href="docs/android-device-monitor-desafio.pdf" download>documentação completa <span>↗</span></a>
+          </div>
+          <div class="hero-stats">
+            <div><strong>100</strong><span>pontos possíveis</span></div>
+            <div><strong>Kotlin</strong><span>linguagem obrigatória</span></div>
+            <div><strong>30 min</strong><span>defesa técnica</span></div>
+          </div>
+        </div>
+        <div class="hero-visual reveal reveal-delay" aria-label="Visualização 3D abstrata de um dispositivo e sinais de telemetria">
+          <div class="orbit orbit-a"></div>
+          <div class="orbit orbit-b"></div>
+          <div class="signal signal-a">x <b>+0.42</b></div>
+          <div class="signal signal-b">battery <b>87%</b></div>
+          <div class="phone-tilt" id="device-card">
+            <div class="phone-face">
+              <div class="phone-camera"></div>
+              <div class="phone-ui-top"><span>ADM / LIVE</span><span>09:42:18</span></div>
+              <div class="waveform"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="axis-readout"><div><span>X</span><b>+0.42</b></div><div><span>Y</span><b>-0.08</b></div><div><span>Z</span><b>+9.71</b></div></div>
+              <div class="phone-line"></div>
+              <div class="phone-foot"><span>ACCELEROMETER</span><span class="live-label"><i></i> STREAMING</span></div>
+            </div>
+          </div>
+          <div class="telemetry-chip"><span>sensor.event</span><b>1,248</b><small>samples / session</small></div>
+          <div class="hero-crosshair">+</div>
+        </div>
+      </section>
+
+      <section class="marquee-band" aria-hidden="true"><div class="marquee-track">BUILD WITH SIGNAL <span>✳</span> OBSERVE THE DEVICE <span>✳</span> SHIP THE EVIDENCE <span>✳</span> BUILD WITH SIGNAL <span>✳</span> OBSERVE THE DEVICE <span>✳</span></div></section>
+
+      <section class="brief section-shell" id="brief">
+        <div class="section-index">01 / O BRIEFING</div>
+        <div class="brief-grid">
+          <div class="reveal"><h2>Um app pequeno.<br /><span>Um sistema inteiro.</span></h2></div>
+          <div class="brief-body reveal reveal-delay"><p>O Android Device Monitor é um exercício de ponta a ponta. A missão é criar um app nativo que consulte o dispositivo, acompanhe bateria e acelerômetro em tempo real, salve leituras e explique o que foi observado.</p><p class="muted">Sem dados simulados. Sem conexão obrigatória. O valor está em transformar sinais de hardware em uma experiência clara, confiável e demonstrável.</p></div>
+        </div>
+        <div class="principles">
+          <article class="principle-card reveal"><span class="card-number">01</span><div class="card-icon icon-scan">◎</div><h3>Observar</h3><p>Leia o mundo físico usando as APIs certas e respeite os limites do dispositivo.</p></article>
+          <article class="principle-card principle-card-active reveal reveal-delay"><span class="card-number">02</span><div class="card-icon icon-wave">∿</div><h3>Interpretar</h3><p>Converta valores crus em uma interface que qualquer pessoa consegue entender.</p></article>
+          <article class="principle-card reveal reveal-delay-2"><span class="card-number">03</span><div class="card-icon icon-stack">▱</div><h3>Provar</h3><p>Registre, teste, documente e defenda as escolhas que tornam a solução confiável.</p></article>
+        </div>
+      </section>
+
+      <section class="requirements section-shell" id="requirements">
+        <div class="section-index">02 / O SISTEMA</div>
+        <div class="section-heading"><div><h2>O que precisa<br /><em>estar vivo.</em></h2></div><p>Seis requisitos obrigatórios formam o núcleo da entrega. Cada um é uma chance de demonstrar fundamentos Android com intenção.</p></div>
+        <div class="requirement-list">
+          <article class="requirement-row reveal"><div class="req-id">RF001</div><div class="req-main"><h3>Informações do dispositivo</h3><p>Fabricante, modelo, versão do Android e API Level — sempre dados reais.</p></div><div class="req-api">Build</div><div class="req-arrow">↗</div></article>
+          <article class="requirement-row reveal"><div class="req-id">RF002</div><div class="req-main"><h3>Monitoramento de bateria</h3><p>Percentual, estado de carregamento e fonte de alimentação quando disponível.</p></div><div class="req-api">BatteryManager</div><div class="req-arrow">↗</div></article>
+          <article class="requirement-row requirement-highlight reveal"><div class="req-id">RF003</div><div class="req-main"><h3>Monitoramento de acelerômetro <span class="live-pill">CORE</span></h3><p>Inicie, pare e acompanhe X, Y, Z e timestamp em tempo real. Libere listeners no ciclo de vida.</p></div><div class="req-api">SensorManager</div><div class="req-arrow">↗</div></article>
+          <article class="requirement-row reveal"><div class="req-id">RF004</div><div class="req-main"><h3>Histórico de leituras</h3><p>Salve manualmente, liste, exclua e mantenha tudo depois de reiniciar o app.</p></div><div class="req-api">Room / SQLite</div><div class="req-arrow">↗</div></article>
+          <article class="requirement-row reveal"><div class="req-id">RF005</div><div class="req-main"><h3>Navegação</h3><p>Três telas, botão voltar funcional e estado consistente entre transições.</p></div><div class="req-api">UI</div><div class="req-arrow">↗</div></article>
+          <article class="requirement-row reveal"><div class="req-id">RF006</div><div class="req-main"><h3>Tratamento de erros</h3><p>Sem acelerômetro, banco indisponível ou histórico vazio: a aplicação continua útil.</p></div><div class="req-api">Resilience</div><div class="req-arrow">↗</div></article>
+        </div>
+      </section>
+
+      <section class="architecture section-shell">
+        <div class="section-index">03 / ARQUITETURA</div>
+        <div class="architecture-layout"><div class="architecture-copy reveal"><h2>Separar para<br /><span>entender.</span></h2><p>MVVM é recomendado. O essencial é tornar visível a responsabilidade de cada camada — da leitura física ao pixel na tela.</p><a class="text-link" href="docs/android-device-monitor-desafio.pdf" download>ver decisões sugeridas <span>↗</span></a></div><div class="architecture-map reveal reveal-delay"><div class="map-line line-one"></div><div class="map-line line-two"></div><div class="map-node node-ui"><small>01</small><strong>UI</strong><span>apresenta</span></div><div class="map-node node-vm"><small>02</small><strong>VIEWMODEL</strong><span>coordena</span></div><div class="map-node node-repo"><small>03</small><strong>REPOSITORY</strong><span>centraliza</span></div><div class="map-node node-data"><small>04</small><strong>DATA SOURCE</strong><span>interage</span></div><div class="map-center"><div class="center-ring"></div><span>signal<br />→ sense</span></div></div></div>
+      </section>
+
+      <section class="score section-shell" id="score">
+        <div class="section-index">04 / A RÉGUA</div>
+        <div class="score-heading"><h2>O que será<br /><em>observado.</em></h2><p>100 pontos para medir funcionalidade, fundamentos, qualidade e a capacidade de explicar o caminho.</p></div>
+        <div class="score-layout"><div class="score-chart"><div class="donut"><div><strong>100</strong><span>PONTOS</span></div></div><span class="chart-caption">O produto importa.<br />O raciocínio também.</span></div><div class="score-bars"><div class="score-item"><div><span>Funcionalidades implementadas</span><b>30</b></div><i><em style="--w: 100%"></em></i></div><div class="score-item"><div><span>Fundamentos Android e Kotlin</span><b>20</b></div><i><em style="--w: 66%"></em></i></div><div class="score-item"><div><span>Arquitetura e qualidade de código</span><b>15</b></div><i><em style="--w: 50%"></em></i></div><div class="score-item"><div><span>Sensores e ciclo de vida</span><b>15</b></div><i><em style="--w: 50%"></em></i></div><div class="score-item"><div><span>Testes e tratamento de erros</span><b>10</b></div><i><em style="--w: 33%"></em></i></div><div class="score-item"><div><span>Documentação, Git e apresentação</span><b>10</b></div><i><em style="--w: 33%"></em></i></div></div></div>
+      </section>
+
+      <section class="deliverables section-shell">
+        <div class="section-index">05 / A ENTREGA</div>
+        <div class="deliverable-grid"><div class="deliverable-copy reveal"><h2>Não entregue<br /><span>só código.</span></h2><p>Entregue evidência: repositório, APK, documentação, testes, experimento e uma demonstração que conte a história do sistema.</p></div><div class="deliverable-orbit reveal reveal-delay"><div class="orbit-label label-repo">GIT REPO</div><div class="orbit-label label-apk">APK</div><div class="orbit-label label-doc">README</div><div class="orbit-label label-test">TESTES</div><div class="orbit-label label-report">RELATÓRIO</div><div class="orbit-core"><span>SHIP<br /><b>IT</b></span></div></div></div>
+      </section>
+
+      <section class="experiment section-shell"><div class="experiment-card reveal"><div class="experiment-tag">EXPERIMENTO OBRIGATÓRIO</div><h2>Repouso <span>vs.</span> movimento</h2><p>Registre leituras em duas condições distintas. Compare os cenários, mostre uma tabela ou resumo e reconheça as limitações.</p><div class="experiment-data"><div><span>CONDIÇÃO A</span><strong>REPOUSO</strong><i class="mini-wave wave-still"></i></div><div class="data-divider">→</div><div><span>CONDIÇÃO B</span><strong>MOVIMENTO</strong><i class="mini-wave wave-motion"></i></div></div></div></section>
+
+      <section class="final-cta section-shell"><div class="final-orb" aria-hidden="true"></div><p class="eyebrow">seu próximo commit começa aqui</p><h2>Pronto para<br /><em>sentir o sinal?</em></h2><div class="hero-actions"><a class="button button-primary" href="docs/android-device-monitor-desafio.pdf" download>Baixar desafio completo <span>↓</span></a><a class="text-link" href="docs/android-device-monitor-desafio.html" target="_blank">abrir como documento <span>↗</span></a></div></section>
+    </main>
+    <footer class="site-footer section-shell"><a class="brand" href="#top"><span class="brand-mark"><i></i><i></i><i></i></span><span>ADM<span class="brand-dot">.</span></span></a><span>Android Device Monitor / Technical Challenge</span><span>© 2026</span></footer>
+    <script src="script.js"></script>
+  </body>
+</html>
