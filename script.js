@@ -29,3 +29,17 @@ if (cursorGlow && window.matchMedia('(pointer: fine)').matches) {
     cursorGlow.style.transform = `translate(${event.clientX - 160}px, ${event.clientY - 160}px)`;
   });
 }
+
+function downloadBrowserCSV() {
+  const csv = "ID,Timestamp,Data_Hora,Eixo_X,Eixo_Y,Eixo_Z,Magnitude,Dispositivo\n" +
+    '1,1792794076000,"23/10/2026 18:21:16",-2.48,4.47,9.67,10.93,"Samsung Galaxy S23 Ultra"\n' +
+    '2,1792794087000,"23/10/2026 18:21:27",-0.16,2.98,9.36,9.82,"Samsung Galaxy S23 Ultra"\n' +
+    '3,1792794097000,"23/10/2026 18:21:37",-0.87,3.29,9.01,9.63,"Samsung Galaxy S23 Ultra"\n' +
+    '4,1792799651681,"23/10/2026 19:54:11",0.00,9.78,0.81,9.81,"Emulador Pixel Android 14"\n';
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "leituras_acelerometro_adm.csv";
+  link.click();
+}
+

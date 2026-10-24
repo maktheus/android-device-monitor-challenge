@@ -23,6 +23,7 @@
         <a href="#brief">Contexto</a>
         <a href="#requirements">Requisitos</a>
         <a href="#screenshots">Telas Reais</a>
+        <a href="#telemetry">Telemetria &amp; Gráficos</a>
         <a href="#ui-example">Exemplo de UI</a>
         <a href="#resources">Referências</a>
       </nav>
@@ -119,7 +120,7 @@
         <div class="section-index">03.1 / TELAS DO APLICATIVO REAL</div>
         <div class="section-heading">
           <div><h2>Execução real no<br /><em>dispositivo e emulador.</em></h2></div>
-          <p>Capturas reais do aplicativo Android nativo em execução, demonstrando os três painéis exigidos, persistência local e integridade de dados.</p>
+          <p>Capturas reais do aplicativo Android nativo em execução, demonstrando os painéis exigidos, persistência com Room, visualização gráfica vetorial, exportação de CSV e compatibilidade com hardware físico.</p>
         </div>
         <div class="screenshots-grid">
           <article class="screenshot-card reveal">
@@ -135,11 +136,173 @@
             <p>Exibição real de fabricante, modelo, versão do Android, API Level, percentual de carga, fonte de alimentação e enum de domínio da bateria.</p>
           </article>
           <article class="screenshot-card reveal reveal-delay-2">
-            <span class="screenshot-tag">Painel 3 · RF004</span>
-            <img src="assets/screenshot-historico.png" alt="Tela de Histórico com Room" loading="lazy" />
-            <h3>Histórico de leituras</h3>
-            <p>Persistência local segura com Room Database, listagem ordenada por timestamp, exclusão pontual e sobrevivência ao reinício do aplicativo.</p>
+            <span class="screenshot-tag">Painel 3 · RF004 &amp; Gráficos</span>
+            <img src="assets/screenshot-historico.png" alt="Tela de Histórico com Gráfico de Curvas Vetoriais" loading="lazy" />
+            <h3>Histórico e Curvas Analíticas</h3>
+            <p>Visualização vetorial nativa em Canvas com curvas para eixos X, Y, Z e Magnitude (||a||), linhas de gravidade (±10 m/s²) e métricas consolidadas.</p>
           </article>
+          <article class="screenshot-card reveal">
+            <span class="screenshot-tag">Recurso · Compartilhamento</span>
+            <img src="assets/screenshot-export-csv.png" alt="Exportação de CSV pelo Android Share Sheet" loading="lazy" />
+            <h3>Exportação Nativa para CSV</h3>
+            <p>Acionamento do Android Share Sheet nativo via Intent para compartilhar séries temporais do banco SQLite diretamente para WhatsApp, Google Drive ou E-mail.</p>
+          </article>
+          <article class="screenshot-card reveal reveal-delay">
+            <span class="screenshot-tag">Hardware Físico · Samsung S23</span>
+            <img src="assets/screenshot-samsung-real.png" alt="Execução em Samsung Galaxy S23 Ultra Físico" loading="lazy" />
+            <h3>Execução no Celular Real</h3>
+            <p>Validação em hardware físico real (Samsung Galaxy S23 Ultra, Android 14, Snapdragon), registrando dados inerciais de gravidade terrestre.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-shell" id="telemetry">
+        <div class="section-index">03.2 / PAINEL INTERATIVO DE TELEMETRIA SALVA</div>
+        <div class="section-heading">
+          <div><h2>Visualização interativa<br /><em>das séries inerciais gravadas.</em></h2></div>
+          <p>Demonstração web interativa dos dados persistidos no banco de dados SQLite/Room do dispositivo, com curvas temporais de aceleração e exportação para CSV.</p>
+        </div>
+
+        <div class="telemetry-dashboard reveal">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border-bottom:1px solid var(--line);padding-bottom:16px;">
+            <div>
+              <span style="font:11px var(--mono);color:var(--cyan);text-transform:uppercase;letter-spacing:.08em;">Room Database · Amostras Gravadas</span>
+              <h3 style="font-size:22px;margin:4px 0 0;font-weight:600;">Série Temporal do Acelerômetro</h3>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;">
+              <span style="background:rgba(120,224,219,.1);color:var(--cyan);border:1px solid rgba(120,224,219,.3);padding:4px 12px;border-radius:20px;font:11px var(--mono);">4 Amostras no SQLite</span>
+              <button onclick="downloadBrowserCSV()" class="btn-csv">Exportar CSV <span>↓</span></button>
+            </div>
+          </div>
+
+          <!-- Metrics Grid -->
+          <div class="telemetry-stats">
+            <div class="stat-box">
+              <small>Eixo X Médio (Lateral)</small>
+              <strong style="color:var(--cyan);">-0.88 m/s²</strong>
+            </div>
+            <div class="stat-box">
+              <small>Eixo Y Médio (Longitudinal)</small>
+              <strong style="color:var(--orange);">+5.13 m/s²</strong>
+            </div>
+            <div class="stat-box">
+              <small>Eixo Z Médio (Normal)</small>
+              <strong style="color:var(--paper);">+7.22 m/s²</strong>
+            </div>
+            <div class="stat-box">
+              <small>Magnitude Média (‖a‖)</small>
+              <strong style="color:#34D399;">9.89 m/s²</strong>
+            </div>
+          </div>
+
+          <!-- Interactive Vector Chart (SVG) -->
+          <div class="telemetry-chart-wrap">
+            <div class="chart-header">
+              <span>Curvas de Aceleração Dinâmica vs. Estática</span>
+              <div class="chart-legend">
+                <span><i style="background:#78E0DB;"></i> Eixo X</span>
+                <span><i style="background:#FF7138;"></i> Eixo Y</span>
+                <span><i style="background:#EEF2EE;"></i> Eixo Z</span>
+                <span><i style="background:#34D399;border-radius:2px;width:14px;height:3px;"></i> ‖a‖</span>
+              </div>
+            </div>
+            <div class="telemetry-svg-container">
+              <svg viewBox="0 0 600 160" preserveAspectRatio="none">
+                <!-- Reference Lines -->
+                <line x1="60" y1="28" x2="590" y2="28" stroke="rgba(255,255,255,0.08)" stroke-dasharray="4,4" />
+                <line x1="60" y1="80" x2="590" y2="80" stroke="rgba(255,255,255,0.18)" />
+                <line x1="60" y1="132" x2="590" y2="132" stroke="rgba(255,255,255,0.08)" stroke-dasharray="4,4" />
+                <!-- Y Axis Labels -->
+                <text x="8" y="32" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">+10 m/s² (1G)</text>
+                <text x="8" y="84" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">0 m/s² (Neutro)</text>
+                <text x="8" y="136" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">-10 m/s²</text>
+                <!-- Curves: X, Y, Z, Magnitude -->
+                <!-- X Path: -2.48, -0.16, -0.87, +0.00 -> Y coords: 93, 81, 85, 80 -->
+                <path d="M 100 93 L 250 81 L 400 85 L 550 80" fill="none" stroke="#78E0DB" stroke-width="2.5" stroke-linecap="round" />
+                <!-- Y Path: +4.47, +2.98, +3.29, +9.78 -> Y coords: 57, 65, 63, 29 -->
+                <path d="M 100 57 L 250 65 L 400 63 L 550 29" fill="none" stroke="#FF7138" stroke-width="2.5" stroke-linecap="round" />
+                <!-- Z Path: +9.67, +9.36, +9.01, +0.81 -> Y coords: 30, 31, 33, 76 -->
+                <path d="M 100 30 L 250 31 L 400 33 L 550 76" fill="none" stroke="#EEF2EE" stroke-width="2.5" stroke-linecap="round" />
+                <!-- Mag Path: 10.93, 9.82, 9.63, 9.81 -> Y coords: 23, 29, 30, 29 -->
+                <path d="M 100 23 L 250 29 L 400 30 L 550 29" fill="none" stroke="#34D399" stroke-width="2" stroke-dasharray="5,3" stroke-linecap="round" />
+                <!-- Point dots -->
+                <circle cx="100" cy="93" r="3.5" fill="#78E0DB" />
+                <circle cx="250" cy="81" r="3.5" fill="#78E0DB" />
+                <circle cx="400" cy="85" r="3.5" fill="#78E0DB" />
+                <circle cx="550" cy="80" r="3.5" fill="#78E0DB" />
+
+                <circle cx="100" cy="57" r="3.5" fill="#FF7138" />
+                <circle cx="250" cy="65" r="3.5" fill="#FF7138" />
+                <circle cx="400" cy="63" r="3.5" fill="#FF7138" />
+                <circle cx="550" cy="29" r="3.5" fill="#FF7138" />
+
+                <circle cx="100" cy="30" r="3.5" fill="#EEF2EE" />
+                <circle cx="250" cy="31" r="3.5" fill="#EEF2EE" />
+                <circle cx="400" cy="33" r="3.5" fill="#EEF2EE" />
+                <circle cx="550" cy="76" r="3.5" fill="#EEF2EE" />
+
+                <circle cx="100" cy="23" r="3" fill="#34D399" />
+                <circle cx="250" cy="29" r="3" fill="#34D399" />
+                <circle cx="400" cy="30" r="3" fill="#34D399" />
+                <circle cx="550" cy="29" r="3" fill="#34D399" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Samples Table -->
+          <div class="telemetry-table-wrap">
+            <table class="telemetry-table">
+              <thead>
+                <tr>
+                  <th>#ID</th>
+                  <th>Data e Hora</th>
+                  <th style="color:var(--cyan);">Eixo X</th>
+                  <th style="color:var(--orange);">Eixo Y</th>
+                  <th style="color:var(--paper);">Eixo Z</th>
+                  <th style="color:#34D399;">Magnitude ‖a‖</th>
+                  <th>Dispositivo / Origem</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>23/10/2026 18:21:16</td>
+                  <td style="color:var(--cyan);">-2.48 m/s²</td>
+                  <td style="color:var(--orange);">+4.47 m/s²</td>
+                  <td style="color:var(--paper);">+9.67 m/s²</td>
+                  <td style="color:#34D399;font-weight:bold;">10.93 m/s²</td>
+                  <td><span style="color:var(--muted);font-size:11px;">Samsung Galaxy S23 Ultra</span></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>23/10/2026 18:21:27</td>
+                  <td style="color:var(--cyan);">-0.16 m/s²</td>
+                  <td style="color:var(--orange);">+2.98 m/s²</td>
+                  <td style="color:var(--paper);">+9.36 m/s²</td>
+                  <td style="color:#34D399;font-weight:bold;">9.82 m/s²</td>
+                  <td><span style="color:var(--muted);font-size:11px;">Samsung Galaxy S23 Ultra</span></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>23/10/2026 18:21:37</td>
+                  <td style="color:var(--cyan);">-0.87 m/s²</td>
+                  <td style="color:var(--orange);">+3.29 m/s²</td>
+                  <td style="color:var(--paper);">+9.01 m/s²</td>
+                  <td style="color:#34D399;font-weight:bold;">9.63 m/s²</td>
+                  <td><span style="color:var(--muted);font-size:11px;">Samsung Galaxy S23 Ultra</span></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>23/10/2026 19:54:11</td>
+                  <td style="color:var(--cyan);">+0.00 m/s²</td>
+                  <td style="color:var(--orange);">+9.78 m/s²</td>
+                  <td style="color:var(--paper);">+0.81 m/s²</td>
+                  <td style="color:#34D399;font-weight:bold;">9.81 m/s²</td>
+                  <td><span style="color:var(--muted);font-size:11px;">Emulador Android 14 (Pixel)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
